@@ -1,109 +1,153 @@
-#ÀÎ½ºÅ¸±×·¥ ÁÁ¾Æ¿ä, ÆÈ·Î¿ì, ´ñ±Û´Ş±â ÀÚµ¿È­
-#findElement °¡ ¹Ù²î¼öµµ ÀÖÀ¸´Ï ÁÖÀÇ
+#ì¸ìŠ¤íƒ€ê·¸ë¨ ì–¸íŒ”ë¡œìš° ìë™í™”
+#findElement ê°€ ë°”ë€Œìˆ˜ë„ ìˆìœ¼ë‹ˆ ì£¼ì˜
 
 library(RSelenium)
 
-remDr <- remoteDriver(remoteServerAddr="localhost" , port="Æ÷Æ®¹øÈ£" , browserName="chrome")
+
+remDr <- remoteDriver(remoteServerAddr="localhost" , port="í¬íŠ¸ë²ˆí˜¸" , browserName="chrome")
 remDr$open()
 remDr$navigate("https://www.instagram.com/")
-Sys.sleep(3)
+
+Sys.sleep(2)
 #ID 
 id <- remDr$findElement(using="css" , "#loginForm > div > div:nth-child(1) > div > label > input")
 id$clickElement()
-id$sendKeysToElement(list("¾ÆÀÌµğ"))
+id$sendKeysToElement(list("ì•„ì´ë””"))
 
 #PW
 pw <- remDr$findElement(using="css" , "#loginForm > div > div:nth-child(2) > div > label > input")
 pw$clickElement()
-pw$sendKeysToElement(list("ºñ¹Ğ¹øÈ£",key="enter"))
-Sys.sleep(5)
+pw$sendKeysToElement(list("",key="enter"))
 
-#·Î±×ÀÎ Á¤º¸¸¦ ÀúÀåÇÏ½Ã°Ú¾î¿ä? -> ³ªÁß¿¡ ÇÏ±â
+Sys.sleep(2)
+#ìˆëŠ”ì§€ ì—†ëŠ” ì²´í¬í•´ì•¼ë¨
+#ë¡œê·¸ì¸ ì •ë³´ë¥¼ ì €ì¥í•˜ì‹œê² ì–´ìš”? -> ë‚˜ì¤‘ì— í•˜ê¸°
 late <- remDr$findElement(using="css" , "#react-root > section > main > div > div > div > div > button")
 late$clickElement()
 
-#¾Ë¸² ¼³Á¤ -> ³ªÁß¿¡ ÇÏ±â
+Sys.sleep(2)
+#ìˆëŠ”ì§€ ì—†ëŠ” ì²´í¬í•´ì•¼ë¨
+#ì•Œë¦¼ ì„¤ì • -> ë‚˜ì¤‘ì— í•˜ê¸°
 notice <- remDr$findElement(using="css" , "body > div.RnEpo.Yx5HN > div > div > div > div.mt3GC > button.aOOlW.HoLwm")
 notice$clickElement()
 
-#ÇØ½¬ÅÂ±× ±Û
-search <- remDr$findElement(using="css" , "#react-root > section > nav > div._8MQSO.Cx7Bp > div > div > div.LWmhU._0aCwM > input")
-search$sendKeysToElement(list("ÁÁ¾Æ¿ä¹İ»ç",key="enter"))
+#í”„ë¡œí•„
+profile <- remDr$findElement(using="css" , "div:nth-child(5) > span > img")
+profile$clickElement()
+
+profile_click <- remDr$findElement(using="css" , "._01UL2 > a:nth-child(1) > div")
+profile_click$clickElement()
+
+Sys.sleep(1)
+# follow-------------------------------------------------------------------------------
+
+#follow ìˆ˜ ì €ì¥
+follow_value <- remDr$findElement(using="css" , "#react-root > section > main > div > header > section > ul > li:nth-child(2) > a > span")
+follow_value <- follow_value$getElementText()
+follow_value <- as.numeric(follow_value)
+
+#follow ì°½ ì—´ê¸°
+follow <- remDr$findElement(using="css" , "a > span")
+follow$clickElement()
+Sys.sleep(1)
+
+# íŒ”ë¡œìš° ì €ì¥
+all_follow <- c() 
+
+#follow ì¡°íšŒ
+all_follow_value <- follow_value %/% 12
+i <- 12
+i2 <- 0
+while(i2 < all_follow_value){
+  find_follow <- paste("body > div.RnEpo.Yx5HN > div > div > div.isgrP > ul > div > li:nth-child(",i,")")
+  find_follow_2 <- remDr$findElement(using="css" , find_follow)
+  find_follow_2$clickElement()
+  i <- i+12
+  i2 <- i2+1
+}
+
+#íŒ”ë¡œìš° ë¦¬ìŠ¤íŠ¸ ì €ì¥
+fe1 <- remDr$findElements(using="css" , "div > div > span > a")
+repl <- sapply(fe1 , function(x){ x$getElementText()})
+all_follow <- c(all_follow , unlist(repl))
+
+#ì—‘ìŠ¤ë°•ìŠ¤
+xbox <- remDr$findElement(using="css" , "div:nth-child(1) > div > div:nth-child(3) > button > div > svg")
+xbox$clickElement()
+
+Sys.sleep(1)
+# following-------------------------------------------------------------------------------
+
+#following ìˆ«ì
+following_value <- remDr$findElement(using="css" , "#react-root > section > main > div > header > section > ul > li:nth-child(3) > a > span")
+following_value <- following_value$getElementText()
+following_value <- as.numeric(following_value)
+
+#following ì°½ ì—´ê¸°
+following <- remDr$findElement(using="css" , "li:nth-child(3) > a > span")
+following$clickElement()
+Sys.sleep(1)
+#following ì¡°íšŒ
+
+all_following_value <- following_value %/% 12
+
+ii <- 12
+ii2 <- 0
+while(ii2 < all_following_value){
+  find_following <- paste("body > div.RnEpo.Yx5HN > div > div > div.isgrP > ul > div > li:nth-child(",ii,")")
+  find_following_2 <- remDr$findElement(using="css" , find_following)
+  find_following_2$clickElement()
+  ii <- ii+12
+  ii2 <- ii2+1
+  (Sys.sleep(1))
+}
+
+# íŒ”ë¡œìœ™ ì €ì¥
+all_following <- c() 
+
+#íŒ”ë¡œìœ™ ë¦¬ìŠ¤íŠ¸ ì €ì¥
+fe2 <- remDr$findElements(using="css" , "div > div > span > a")
+repl2 <- sapply(fe2 , function(x){ x$getElementText()})
+all_following <- c(all_following , unlist(repl2))
+
+Sys.sleep(1)
+# ë¹„êµ-------------------------------------------------------------------------------
+
+all_follow
+all_following
+
+real_follow <- intersect(all_follow,all_following)
+real_unfollow <- setdiff(all_following,all_follow)
+
+#ë§íŒ”, ì–¸íŒ” ì‚¬ëŒë“¤
+real_follow
+real_unfollow
+
+#ë§íŒ”, ì–¸íŒ” ìˆ«ì
+length(real_follow)
+length(real_unfollow)
+
+# ì–¸íŒ”í•˜ê¸°---------------------------------------------------------------------------
 
 
-#ÇØ½¬ÅÂ±× °Ë»ö
-click <- remDr$findElement(using="css" , "#react-root > section > nav > div._8MQSO.Cx7Bp > div > div > div.LWmhU._0aCwM > div.drKGC > div > a:nth-child(1) > div > div > div.uyeeR > span")
-click$clickElement()
+unfollow_check <- all_following %in% all_follow
+length(all_following)
 
-
-
-
-#-------------------------------------------------
-
-# ¼±ÆÈ & ÁÁ¾Æ¿ä & ´ñ±Û  Ã¢ ¿·À¸·Î
-
-post_click <- remDr$findElement(using="css" , "#react-root > section > main > article > div:nth-child(3) > div > div:nth-child(1) > div:nth-child(1) > a > div > div._9AhH0")
-post_click$clickElement()
-
-#1~10 ±îÁö ¹İº¹
-for(i in c(1:10)){
-  Sys.sleep(6)
-  
-  #ÁÁ¾Æ¿ä
-  like <- remDr$findElements(using="css" , ".fr66n")
-  if(length(like) == 0){
-    comment_click <- remDr$findElement(using="css" , "body > div._2dDPU.CkGkG > div.EfHg9 > div > div > a._65Bje.coreSpriteRightPaginationArrow")
-    comment_click$clickElement()
+iii <- 1
+iii2 <- 1
+while(iii2 < length(all_following)){
+  if(unfollow_check[iii] == FALSE){
+    pageNumCss <- paste("body > div.RnEpo.Yx5HN > div > div > div.isgrP > ul > div > li:nth-child(",iii,") > div > div.Pkbci > button")
+    unfollow_button <- remDr$findElement(using="css" , pageNumCss)
+    unfollow_button$clickElement()
+    Sys.sleep(0.5)
+    unfollow_button_yes <- remDr$findElement(using="css" , "button.aOOlW.-Cab_")
+    unfollow_button_yes$clickElement()
+    Sys.sleep(1)
+    iii <- iii+1
   }else{
-    like <- remDr$findElement(using="css" , ".fr66n")
-    like$clickElement()
-    
-    Sys.sleep(2)
-    
-    #ÆÈ·Î¿ì
-    follow <- remDr$findElement(using="css" , "body > div._2dDPU.CkGkG > div.zZYga > div > article > header > div.o-MQd.z8cbW > div.PQo_0.RqtMr > div.bY2yH > button")
-    follow$clickElement()
-    unfollow <- remDr$findElements(using="css" , "button.aOOlW.HoLwm")
-    if(length(unfollow) == 1){
-      cancel_unfollow <- remDr$findElement(using="css" , "body > div.RnEpo.Yx5HN > div > div > div > div.mt3GC > button.aOOlW.HoLwm")
-      cancel_unfollow$clickElement()
-      
-      Sys.sleep(3)
-      
-      comment_click <- remDr$findElement(using="css" , "body > div._2dDPU.CkGkG > div.EfHg9 > div > div > a._65Bje.coreSpriteRightPaginationArrow")
-      comment_click$clickElement()
-      
-    }else{
-      
-      Sys.sleep(6)
-      
-      #´ñ±Û
-      
-      comment <- remDr$findElements(using="css" , "form > textarea")
-      if(length(comment) == 0){
-        comment_click <- remDr$findElement(using="css" , "body > div._2dDPU.CkGkG > div.EfHg9 > div > div > a._65Bje.coreSpriteRightPaginationArrow")
-        comment_click$clickElement()
-      }else{
-        comment <- remDr$findElement(using="css" , "form > textarea")
-        comment$clickElement()
-        
-        comment2 <- remDr$findElement(using="css" , ".Ypffh")
-        comment2$sendKeysToElement(list("ÁÁ¾Æ¿ä ²Ú ´©¸£°í °©´Ï´Ù~"))
-        
-        Sys.sleep(3)
-        
-        #´ñ±Û ´Ş±â
-        comment_click <- remDr$findElement(using="css" , "section.sH9wk._JgwE > div > form > button")
-        comment_click$clickElement()
-        
-        Sys.sleep(5)
-      }
-      comment_click <- remDr$findElement(using="css" , "body > div._2dDPU.CkGkG > div.EfHg9 > div > div > a._65Bje.coreSpriteRightPaginationArrow")
-      comment_click$clickElement()
-      
-      Sys.sleep(1)
-      
-    }
+    iii <- iii+1
   }
+  iii2 <- iii2+1
 }
 
