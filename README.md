@@ -30,7 +30,8 @@ instargram 페이지 자체에서 findElement의 css selector OR name 가 바뀌
 
 3. 자동화 하려는 해쉬태그 글, 댓글 입력해도 됨<br/>
 
-4 제어관련<br/>
+4. 제어관련<br/>
+
 
  - 시간 제어 - Sys.sleep 
  - 작업 수 제어 - for
